@@ -6,6 +6,7 @@ function RootLayoutNav() {
       <Stack initialRouteName='game'>
         <Stack.Screen name="index" options={{ headerShown: false }} />
         <Stack.Screen name="game" options={{ presentation: 'modal' }} />
+        <Stack.Screen name="animated" options={{ presentation: 'modal' }} />
       </Stack>
   );
 }

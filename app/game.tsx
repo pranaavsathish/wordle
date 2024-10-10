@@ -9,6 +9,8 @@ import {  useFonts, AbrilFatface_400Regular } from '@expo-google-fonts/abril-fat
 import { useRouter } from 'expo-router';
 import getRandomWord from '@/utils/wordGenerator';
 import verifyWord from '@/utils/verifyWord';
+import Animated, { useSharedValue, useAnimatedStyle, withRepeat, withTiming, Easing } from 'react-native-reanimated';
+import { transform } from '@babel/core';
 
 //Character does not exist: 1   #A29EA3
 //Character misplaced:      2   #BDB250
@@ -61,6 +63,35 @@ const game = () => {
     //     console.log(word2);
     //     console.log(word3);
     // }, [word1, word2, word3]);
+
+    //Animations
+    const translateX = useSharedValue(0);
+    const animatedStyle = useAnimatedStyle(() => {
+        return {
+            transform: [{translateX: translateX.value}]}
+    });
+
+    const [flipped, setFlipped] = useState(false);
+    const rotation = useSharedValue(0);
+
+    const flipCard = () => {
+        rotation.value = withTiming(flipped ? 0 : 1, {
+            duration: 500,
+            easing: Easing.inOut(Easing.ease),
+        });
+        setFlipped(!flipped);
+    };
+
+    const animatedStyleFlip = useAnimatedStyle(() => {
+        const rotateX = rotation.value * Math.PI *2;
+        return {
+            transform: [{ rotateX: `${rotateX}rad` }],
+        };
+    });
+
+    const animationSelector = () => {
+        
+    };
 
     const [fontsLoaded] = useFonts({
         AbrilFatface_400Regular,
@@ -130,8 +161,10 @@ const game = () => {
             setGuess('');
             // console.log(res);
             compareWordAndSetState();
+            flipCard();
         }
         catch(err){
+            translateX.value = withRepeat(withTiming(8, { duration: 50 }), 6, true);
             return;
         }
     };
@@ -185,7 +218,7 @@ const game = () => {
             <View className='flex flex-row items-center space-x-3 pr-4'>
                 <TouchableOpacity><Feather name="help-circle" size={20} color="black" /></TouchableOpacity>
                 <TouchableOpacity><Entypo name="bar-graph" size={20} color="black" /></TouchableOpacity>
-                <TouchableOpacity><Ionicons name="settings-sharp" size={20} color="black" /></TouchableOpacity>
+                <TouchableOpacity onPress={() => router.push('./animated')} ><Ionicons name="settings-sharp" size={20} color="black" /></TouchableOpacity>
             </View>
         </View>
 
@@ -194,7 +227,7 @@ const game = () => {
             {
                 grid.map((row) => 
                 (
-                    <View key={grid.indexOf(row)} className='flex flex-row gap-x-[6px]'>
+                    <Animated.View key={grid.indexOf(row)} className='flex flex-row gap-x-[6px]' style={[{},currRow === grid.indexOf(row) && animatedStyle || currRow-1 === grid.indexOf(row) && animatedStyleFlip]}>
                     {
                         row.map(
                             (item) =>
@@ -217,7 +250,7 @@ const game = () => {
                             ) 
                         )
                     }
-                    </View>
+                    </Animated.View>
                 )
                 )
             }

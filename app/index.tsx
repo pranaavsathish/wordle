@@ -16,7 +16,7 @@ const index = () => {
   return (
     <View className=''>
       <Text>index</Text>
-      <Button title='go to game' onPress={() => router.push('game')} />
+      <Button title='go to game' onPress={() => router.push('./game')} />
     </View>
   )
 }
