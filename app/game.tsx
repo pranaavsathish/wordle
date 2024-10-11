@@ -10,7 +10,7 @@ import { useRouter } from 'expo-router';
 import getRandomWord from '@/utils/wordGenerator';
 import verifyWord from '@/utils/verifyWord';
 import Animated, { useSharedValue, useAnimatedStyle, withRepeat, withTiming, Easing } from 'react-native-reanimated';
-import { transform } from '@babel/core';
+
 
 //Character does not exist: 1   #A29EA3
 //Character misplaced:      2   #BDB250
