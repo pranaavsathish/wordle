@@ -7,7 +7,7 @@ const index = () => {
 
   useEffect(() => {
     const timer = setTimeout(() => {
-        router.push('./win')
+        router.push('./game')
       }, 100);
   
       return () => clearTimeout(timer);
